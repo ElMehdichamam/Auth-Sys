@@ -3,12 +3,12 @@ const { number, minLength } = require('zod');
 
 const userSchema = new mongoose.Schema({
     email:{
-        type : string,
+        type : String,
         required : true,
         match: [/^\S+@\S+\.\S+$/, 'Please use a valid email']
     },
     password:{
-        type : string,
+        type : String,
         required : true,
         minLength:8
     }
