@@ -1,15 +1,16 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const registerController = async (req,res) =>{
     try {
         const {email,password} = req.body;
-        const existing = await User.findOne(email);
-        if(exitsting){
+        const existing = await User.findOne({email});
+        if(existing){
             return res.status(400).json({message:"Email Already Exsist"});
         }
         const hashedPass = await bcrypt.hash(password,10);
-        const user = User.create({
+        const user = await User.create({
             email,
             password:hashedPass
         });
@@ -24,7 +25,7 @@ const registerController = async (req,res) =>{
 
 const getMe = async (req,res) =>{
     try {
-    const User = await user.findById(req.user.id).select('-password');
+    const user = await User.findById(req.user.id).select('-password');
         if(!user){
             return res.status(400).json({message:"User Not Found"});
         }
